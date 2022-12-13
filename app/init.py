@@ -25,26 +25,32 @@ def check_and_install_models(force=False, load_only_lang_codes=None):
         if load_only_lang_codes is not None:
             # load_only_lang_codes: List[str] (codes)
             # Ensure the user does not use any unavailable language code.
-            unavailable_lang_codes = set(load_only_lang_codes)
-            for pack in available_packages:
-                unavailable_lang_codes -= {pack.from_code, pack.to_code}
-            if unavailable_lang_codes:
-                raise ValueError(
-                    "Unavailable language codes: %s."
-                    % ",".join(sorted(unavailable_lang_codes))
-                )
+            # unavailable_lang_codes = set(load_only_lang_codes)
+            # for pack in available_packages:
+            #     unavailable_lang_codes -= {pack.from_code, pack.to_code}
+            # if unavailable_lang_codes:
+            #     raise ValueError(
+            #         "Unavailable language codes: %s."
+            #         % ",".join(sorted(unavailable_lang_codes))
+            #     )
             # Keep only the packages that have both from_code and to_code in our list.
-            available_packages = [
-                pack
-                for pack in available_packages
-                if pack.from_code in load_only_lang_codes and pack.to_code in load_only_lang_codes
-            ]
-            if not available_packages:
+            avail_p={"%s-%s" % (pack.from_code,pack.to_code) : pack  for pack in available_packages}
+            selected_packages=[]
+            for p in load_only_lang_codes:
+                if p in avail_p:
+                    selected_packages.append(avail_p[p])
+
+            # available_packages = [
+            #     pack
+            #     for pack in available_packages
+            #     if pack.from_code in load_only_lang_codes and pack.to_code in load_only_lang_codes
+            # ]
+            if not selected_packages:
                 raise ValueError("no available package")
-            print("Keep %s models" % len(available_packages))
+            print("Keep %s models" % len(selected_packages))
 
         # Download and install all available packages
-        for available_package in available_packages:
+        for available_package in selected_packages:
             print(
                 "Downloading %s (%s) ..."
                 % (available_package, available_package.package_version)
