@@ -39,6 +39,8 @@ jobs:
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: with_models=true,models=ar-en,az-en,ca-en,zh-en,cs-en,da-en,nl-en,eo-en,fi-en,fr-en,de-en,el-en,he-en,hi-en,hu-en,id-en,ga-en,it-en,ja-en,ko-en,fa-en,pl-en,pt-en,ru-en,sk-en,es-en,sv-en,tr-en,uk-en
+          build-args: |
+            with_models=true
+            models=ar-en,az-en,ca-en,zh-en,cs-en,da-en,nl-en,eo-en,fi-en,fr-en,de-en,el-en,he-en,hi-en,hu-en,id-en,ga-en,it-en,ja-en,ko-en,fa-en,pl-en,pt-en,ru-en,sk-en,es-en,sv-en,tr-en,uk-en
         env:
           TAG: ${{ startsWith(github.ref, 'refs/tags/') && steps.get-variables.outputs.version || 'latest' }}
